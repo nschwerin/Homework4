@@ -9,5 +9,5 @@ const io = require('socket.io')(http);
 const user = require('../models/user');
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: '.' });
+  res.sendFile('index.html', { root: '.' });
 });
