@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<ul id="User"></ul>
+<ul id="names"></ul>
 <form id="form" action="">
-    <input id="input" autocomplete="off" /><button>Send</button>
+    <input id="input" autocomplete="off" /><button>Submit</button>
 </form>
 <script src="/socket.io/socket.io.js"></script>
 
@@ -17,18 +17,29 @@
     const form = document.getElementById('form');
     const input = document.getElementById('input');
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    input.addEventListener('keyup', function(e) {
         if (input.value) {
-            socket.emit('', input.value);
+            socket.emit('search', input.value);
         }
     });
 
-    socket.on('chat message', function(msg) {
-        const item = document.createElement('li');
-        item.textContent = msg;
-        names.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('search submitted', input.value);
+            input.value = '';
+        }
+    });
+
+    socket.on('search', function(e) {
+        while(names.firstChild){
+            names.removeChild(names.firstChild)
+        }
+        for (let i=0; i<e.length; i++){
+            const item = document.createElement('li');
+            item.textContent = e[i].names;
+            names.appendChild(item);
+        }
     });
 </script>
 </body>
