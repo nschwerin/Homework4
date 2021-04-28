@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<ul id="User"></ul>
+<form id="form" action="">
+    <input id="input" autocomplete="off" /><button>Send</button>
+</form>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socket = io();
+
+    const names = document.getElementById('names');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('', input.value);
+        }
+    });
+
+    socket.on('chat message', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+</script>
+</body>
+</html>
