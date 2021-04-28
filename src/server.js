@@ -15,12 +15,19 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   socket.on('submit', (msg) => {
     const nameStr = {
-      msg: msg,
+      msg,
     };
-  socket.on('search', (msg) => {
-    const name = user.find( { name: new RegExp( msg, 'i')})
-    socket.emit('search', name);
-  }});
-})
-
-http.listen(process.env.PORT);
+    socket.on('search', (msg) => {
+      const name = user.find({ name: new RegExp(msg, 'i') });
+      socket.emit('search', name);
+    });
+  });
+})(async () => {
+  await Mongoose.connect(process.env.CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  });
+  http.listen(process.env.PORT);
+});
